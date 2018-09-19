@@ -1,0 +1,15 @@
+{
+  "owner": "elaine",
+  "address": {
+    "line1": "4",
+    "line2": "332b",
+    "line4": "Goswell Road",
+    "postCode": "EC1V 7LQ",
+    "city": "London",
+    "country": "U.K."
+  },
+  "airbnbId": 2615058,
+  "numberOfBedrooms": 2,
+  "numberOfBathrooms": 2,
+  "incomeGenerated": 1200
+}

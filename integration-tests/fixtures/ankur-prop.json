@@ -1,0 +1,16 @@
+{
+  "owner": "ankur",
+  "address": {
+    "line1": "4",
+    "line2": "Tower Mansions",
+    "line3": "Off Station road",
+    "line4": "86-87 Grange Road",
+    "postCode": "SE1 3BW",
+    "city": "London",
+    "country": "U.K."
+  },
+  "airbnbId": 858666,
+  "numberOfBedrooms": 3,
+  "numberOfBathrooms": 1,
+  "incomeGenerated": 10000
+}

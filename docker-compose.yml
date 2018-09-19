@@ -1,0 +1,28 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: sequelize_test
+      MYSQL_DATABASE: hostmaker
+      MYSQL_USER: sequelize_test
+      MYSQL_PASSWORD: sequelize_test
+    command: mysqld --user=root --verbose
+    ports:
+      - "3306:3306"
+    container_name: mysql-hostmaker
+
+  web:
+    build: .
+    command: npm start
+    volumes:
+      - .:/usr/app/
+      - ./node_modules:/usr/app/node_modules
+    environment:
+      MYSQL_DATABASE: hostmaker
+      MYSQL_USER: sequelize_test
+      MYSQL_PASSWORD: sequelize_test
+    ports:
+      - "8432:8432"
+    depends_on:
+      - db
