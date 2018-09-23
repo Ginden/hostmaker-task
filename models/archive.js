@@ -1,4 +1,6 @@
 'use strict';
+
+
 module.exports = (sequelize, DataTypes) => {
     const Archive = sequelize.define('Archive', {
         Table: DataTypes.STRING,
@@ -6,7 +8,5 @@ module.exports = (sequelize, DataTypes) => {
         eventType: DataTypes.STRING,
         value: DataTypes.JSON
     }, {});
-    Archive.associate = function () {
-    };
     return Archive;
 };

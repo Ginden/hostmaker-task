@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         hooks: {
-            beforeSave(instance, options) {
+            beforeSave(instance) {
                 const tableName = this.name;
                 return sequelize.models.Archive.create({
                     Table: tableName,
@@ -62,7 +62,7 @@ module.exports = (sequelize, DataTypes) => {
                 })
 
             },
-            beforeDestroy(instance, options) {
+            beforeDestroy(instance) {
                 const tableName = this.name;
                 return sequelize.models.Archive.create({
                     Table: tableName,
@@ -71,7 +71,7 @@ module.exports = (sequelize, DataTypes) => {
                     value: instance
                 })
             },
-            beforeUpdate(instance, options) {
+            beforeUpdate(instance) {
                 const tableName = this.name;
                 return sequelize.models.Archive.create({
                     Table: tableName,
