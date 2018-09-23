@@ -2,6 +2,7 @@
 /* eslint no-console: 0 */
 const rp = require('request-promise');
 const {expect} = require('chai');
+const _ = require('lodash');
 
 const port = process.env.PORT || 8432;
 const hostname = `http://localhost:${port}`;
@@ -9,7 +10,6 @@ const hostname = `http://localhost:${port}`;
 const ankurProperty = require('./fixtures/ankur-prop');
 const carlosProperty = require('./fixtures/carlos-prop');
 const elaineProperty = require('./fixtures/elaine-prop');
-
 
 
 (async () => {
@@ -56,6 +56,16 @@ const elaineProperty = require('./fixtures/elaine-prop');
 
     console.log('And these changes are in database');
 
+    console.log('Let\'s check if business rules are enforced');
+
+    const malformed = generateMalformedProperties(carlosProperty);
+
+    for(const [issue, prop] of malformed) {
+        const result = await updateProperty(prop);
+        expect(result).to.have.property('error');
+        console.log(`${issue} generates error!`);
+    }
+
     console.log('Time to remove all properties from database!');
 
     await deleteProperty(elaineProperty);
@@ -66,6 +76,32 @@ const elaineProperty = require('./fixtures/elaine-prop');
     console.error(err);
     process.exit(1);
 });
+
+
+function generateMalformedProperties(property) {
+    const ret = [];
+    ret.push([
+        'Negative income', {
+            ...property,
+            incomeGenerated: -5
+        }
+    ]);
+    ret.push([
+        'Empty adress.line1', _.defaultsDeep({
+            address: {
+                line1: null
+            }
+        }, _.cloneDeep(property))
+    ]);
+
+    ret.push([
+        'No bedrooms', {
+            ...property,
+            numberOfBathrooms: 0
+        }
+    ]);
+    return ret;
+}
 
 async function createProperty(property) {
     const reactionToCreatedProperty = await rp({
@@ -92,9 +128,12 @@ async function expectToExist(property) {
     const reactionToExistingProperty = await rp({
         url: `${hostname}/property/${property.airbnbId}`,
         json: true,
-        simple: false
+        simple: false,
+        qs: {
+            with_archived: 'true'
+        }
     });
-    expect(reactionToExistingProperty).to.deep.equal(property);
+    expect(reactionToExistingProperty).to.deep.include(property);
 }
 
 async function deleteProperty(property) {
@@ -109,7 +148,7 @@ async function deleteProperty(property) {
 }
 
 async function updateProperty(property) {
-    await rp({
+    return rp({
         url: `${hostname}/property/${property.airbnbId}`,
         json: true,
         simple: false,

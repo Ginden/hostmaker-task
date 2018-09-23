@@ -3,11 +3,17 @@ module.exports = (sequelize, DataTypes) => {
     const Property = sequelize.define('Property', {
         Host: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                min: 3
+            }
         },
         AdressLine1: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                len: [1, 255]
+            }
         },
         AdressLine2: {
             type: DataTypes.STRING,
@@ -19,19 +25,31 @@ module.exports = (sequelize, DataTypes) => {
         },
         AdressLine4: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                len: [4, 255]
+            }
         },
         Postcode: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                len: [2, 20]
+            }
         },
         City: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                len: [2, 255]
+            }
         },
         Country: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                len: [2, 100]
+            }
         },
         id: {
             type: DataTypes.INTEGER,
@@ -40,15 +58,28 @@ module.exports = (sequelize, DataTypes) => {
         },
         numberOfBedrooms: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                min: 0
+            }
         },
         numberOfBathrooms: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                min: 1
+            }
         },
         incomeGenerated: {
             type: DataTypes.DECIMAL(18, 2),
-            allowNull: false
+            allowNull: false,
+            validate: {
+                biggerThanZero(value) {
+                    if (!value || value < 0) {
+                        throw new Error('Income generated have to bigger than 0');
+                    }
+                }
+            }
         }
     }, {
         hooks: {
