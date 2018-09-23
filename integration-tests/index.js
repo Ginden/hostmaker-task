@@ -56,6 +56,10 @@ const elaineProperty = require('./fixtures/elaine-prop');
 
     console.log('And these changes are in database');
 
+    console.log('Time to remove all properties from database!');
+
+    await deleteProperty(elaineProperty);
+    await deleteProperty(carlosProperty);
 
 })().catch(err => {
     // eslint-disable-next-line
@@ -100,17 +104,17 @@ async function deleteProperty(property) {
         simple: false,
         method: 'DELETE'
     });
-    console.log(reactionToDeletingProperty);
+    expect(reactionToDeletingProperty.propertiesDeleted).to.equal(1);
+    expect(reactionToDeletingProperty.message).to.equal(`Deleted property ${property.airbnbId}`);
 }
 
 async function updateProperty(property) {
-    const reactionToUpdatedProperty = await rp({
+    await rp({
         url: `${hostname}/property/${property.airbnbId}`,
         json: true,
         simple: false,
         method: 'PUT',
         body: property
     });
-    console.log(reactionToUpdatedProperty);
 
 }

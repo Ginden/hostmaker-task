@@ -50,7 +50,38 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DECIMAL(18, 2),
             allowNull: false
         }
-    }, {});
+    }, {
+        hooks: {
+            beforeSave(instance, options) {
+                const tableName = this.name;
+                return sequelize.models.Archive.create({
+                    Table: tableName,
+                    TableId: instance.id,
+                    eventType: 'save',
+                    value: instance
+                })
+
+            },
+            beforeDestroy(instance, options) {
+                const tableName = this.name;
+                return sequelize.models.Archive.create({
+                    Table: tableName,
+                    TableId: instance.id,
+                    eventType: 'delete',
+                    value: instance
+                })
+            },
+            beforeUpdate(instance, options) {
+                const tableName = this.name;
+                return sequelize.models.Archive.create({
+                    Table: tableName,
+                    TableId: instance.id,
+                    eventType: 'update',
+                    value: instance
+                });
+            }
+        }
+    });
     Property.associate = function () {
         // Associations can be defined here
     };
